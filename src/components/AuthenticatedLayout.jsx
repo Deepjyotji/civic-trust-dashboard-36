@@ -4,81 +4,85 @@ import { Button } from "@/components/ui/button";
 import Index from "../pages/Index";
 import Dashboard from "./Dashboard";
 import TrackService from "./TrackService";
-import DataCollection from "./DataCollection";
 import DeliveryManager from "./DeliveryManager";
 import InformedDelivery from "./InformedDelivery";
 import UserDashboard from "./UserDashboard";
 import StaffDashboard from "./StaffDashboard";
+import { LayoutDashboard, Search, Truck, Mail, LogOut } from "lucide-react";
 
-const AuthenticatedLayout = ({ userRole }) => {
+const AuthenticatedLayout = ({ userRole, onLogout }) => {
+  const navItems = [
+    { title: "Home", path: "/", icon: <LayoutDashboard className="h-5 w-5" /> },
+    { title: "Dashboard", path: "/dashboard", icon: <LayoutDashboard className="h-5 w-5" /> },
+    { title: "Track Service", path: "/track", icon: <Search className="h-5 w-5" /> },
+  ];
+
+  if (userRole === 'user') {
+    navItems.push(
+      { title: "Delivery Manager", path: "/delivery-manager", icon: <Truck className="h-5 w-5" /> },
+      { title: "Informed Delivery", path: "/informed-delivery", icon: <Mail className="h-5 w-5" /> }
+    );
+  }
+
   return (
-    <div className="min-h-screen bg-gray-100">
-      <nav className="bg-white shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between h-16">
-            <div className="flex">
-              <div className="flex-shrink-0 flex items-center">
-                <span className="text-xl font-bold text-gray-800">DoP Monitor</span>
-              </div>
-              <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
-                <Link to="/" className="text-gray-900 inline-flex items-center px-1 pt-1 border-b-2 border-transparent hover:border-gray-300 text-sm font-medium">
-                  Home
-                </Link>
-                <Link to="/dashboard" className="text-gray-900 inline-flex items-center px-1 pt-1 border-b-2 border-transparent hover:border-gray-300 text-sm font-medium">
-                  Dashboard
-                </Link>
-                <Link to="/track" className="text-gray-900 inline-flex items-center px-1 pt-1 border-b-2 border-transparent hover:border-gray-300 text-sm font-medium">
-                  Track Service
-                </Link>
-                {userRole === 'user' && (
-                  <>
-                    <Link to="/delivery-manager" className="text-gray-900 inline-flex items-center px-1 pt-1 border-b-2 border-transparent hover:border-gray-300 text-sm font-medium">
-                      Delivery Manager
-                    </Link>
-                    <Link to="/informed-delivery" className="text-gray-900 inline-flex items-center px-1 pt-1 border-b-2 border-transparent hover:border-gray-300 text-sm font-medium">
-                      Informed Delivery
-                    </Link>
-                  </>
-                )}
-                {(userRole === 'deliveryAgent' || userRole === 'postOfficeStaff') && (
-                  <Link to="/data-collection" className="text-gray-900 inline-flex items-center px-1 pt-1 border-b-2 border-transparent hover:border-gray-300 text-sm font-medium">
-                    Data Collection
-                  </Link>
-                )}
-              </div>
-            </div>
-            <div className="hidden sm:ml-6 sm:flex sm:items-center">
-              <Button variant="outline">Sign Out</Button>
-            </div>
-          </div>
+    <div className="flex h-screen bg-gray-100">
+      {/* Sidebar */}
+      <aside className="w-64 bg-white shadow-md">
+        <div className="p-4">
+          <h1 className="text-2xl font-bold text-blue-600">DoP Monitor</h1>
         </div>
-      </nav>
+        <nav className="mt-8">
+          {navItems.map((item, index) => (
+            <Link
+              key={index}
+              to={item.path}
+              className="flex items-center px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors"
+            >
+              {item.icon}
+              <span className="ml-3">{item.title}</span>
+            </Link>
+          ))}
+        </nav>
+        <div className="absolute bottom-0 w-64 p-4">
+          <Button
+            onClick={onLogout}
+            variant="outline"
+            className="w-full flex items-center justify-center"
+          >
+            <LogOut className="h-5 w-5 mr-2" />
+            Log Out
+          </Button>
+        </div>
+      </aside>
 
-      <div className="py-10">
-        <main>
-          <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <Routes>
-              <Route path="/" element={<Index userRole={userRole} />} />
-              <Route path="/dashboard" element={
-                userRole === 'user' ? <UserDashboard /> :
-                (userRole === 'deliveryAgent' || userRole === 'postOfficeStaff') ? <StaffDashboard userRole={userRole} /> :
-                <Dashboard userRole={userRole} />
-              } />
-              <Route path="/track" element={<TrackService />} />
-              {userRole === 'user' && (
-                <>
-                  <Route path="/delivery-manager" element={<DeliveryManager />} />
-                  <Route path="/informed-delivery" element={<InformedDelivery />} />
-                </>
-              )}
-              {(userRole === 'deliveryAgent' || userRole === 'postOfficeStaff') && (
-                <Route path="/data-collection" element={<DataCollection userRole={userRole} />} />
-              )}
-              <Route path="*" element={<Navigate to="/" replace />} />
-            </Routes>
-          </div>
-        </main>
-      </div>
+      {/* Main content */}
+      <main className="flex-1 overflow-y-auto">
+        <div className="p-8">
+          <Routes>
+            <Route path="/" element={<Index userRole={userRole} />} />
+            <Route
+              path="/dashboard"
+              element={
+                userRole === 'user' ? (
+                  <UserDashboard />
+                ) : (userRole === 'deliveryAgent' || userRole === 'postOfficeStaff') ? (
+                  <StaffDashboard userRole={userRole} />
+                ) : (
+                  <Dashboard userRole={userRole} />
+                )
+              }
+            />
+            <Route path="/track" element={<TrackService />} />
+            {userRole === 'user' && (
+              <>
+                <Route path="/delivery-manager" element={<DeliveryManager />} />
+                <Route path="/informed-delivery" element={<InformedDelivery />} />
+              </>
+            )}
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </Routes>
+        </div>
+      </main>
     </div>
   );
 };

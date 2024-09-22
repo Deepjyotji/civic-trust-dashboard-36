@@ -5,26 +5,31 @@ import { Button } from "@/components/ui/button";
 import { TrendingUp, TrendingDown, AlertCircle, Package, Truck, Clock } from "lucide-react";
 
 const StaffDashboard = ({ userRole }) => {
-  // Mock data - in a real application, this would come from an API
-  const metrics = [
-    { title: "Packages Processed", value: 120, target: 150, unit: "", trend: "up" },
-    { title: "Average Processing Time", value: 5.2, target: 5, unit: "min", trend: "down" },
-    { title: "Customer Satisfaction", value: 4.2, target: 4.5, unit: "/5", trend: "up" },
-  ];
+  const metrics = userRole === 'deliveryAgent'
+    ? [
+        { title: "Deliveries Completed", value: 45, target: 50, unit: "", trend: "up" },
+        { title: "On-Time Delivery Rate", value: 95, target: 98, unit: "%", trend: "up" },
+        { title: "Customer Satisfaction", value: 4.2, target: 4.5, unit: "/5", trend: "up" },
+      ]
+    : [
+        { title: "Packages Processed", value: 120, target: 150, unit: "", trend: "up" },
+        { title: "Average Processing Time", value: 5.2, target: 5, unit: "min", trend: "down" },
+        { title: "Customer Satisfaction", value: 4.2, target: 4.5, unit: "/5", trend: "up" },
+      ];
 
   const tasks = [
-    { id: 1, title: "Process incoming packages", priority: "High", dueTime: "10:00 AM" },
+    { id: 1, title: userRole === 'deliveryAgent' ? "Complete deliveries" : "Process incoming packages", priority: "High", dueTime: "10:00 AM" },
     { id: 2, title: "Update delivery statuses", priority: "Medium", dueTime: "12:00 PM" },
     { id: 3, title: "Resolve customer inquiries", priority: "Low", dueTime: "3:00 PM" },
   ];
 
   return (
-    <div className="p-8 bg-gray-100 min-h-screen">
-      <h1 className="text-3xl font-bold mb-8 text-gray-800">
+    <div className="space-y-8">
+      <h1 className="text-3xl font-bold text-gray-800">
         {userRole === 'deliveryAgent' ? 'Delivery Agent Dashboard' : 'Post Office Staff Dashboard'}
       </h1>
       
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {metrics.map((metric, index) => (
           <Card key={index} className="hover:shadow-lg transition-shadow duration-300">
             <CardHeader className="pb-2">
@@ -63,7 +68,7 @@ const StaffDashboard = ({ userRole }) => {
             {tasks.map((task) => (
               <div key={task.id} className="py-4 flex justify-between items-center">
                 <div className="flex items-center">
-                  {task.title.includes("packages") ? (
+                  {task.title.includes("deliveries") || task.title.includes("packages") ? (
                     <Package className="h-6 w-6 mr-2 text-blue-500" />
                   ) : task.title.includes("delivery") ? (
                     <Truck className="h-6 w-6 mr-2 text-green-500" />

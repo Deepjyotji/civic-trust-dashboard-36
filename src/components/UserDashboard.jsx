@@ -2,7 +2,7 @@ import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
-import { TrendingUp, TrendingDown, AlertCircle } from "lucide-react";
+import { TrendingUp, TrendingDown, AlertCircle, Package, Truck } from "lucide-react";
 
 const UserDashboard = () => {
   // Mock data - in a real application, this would come from an API
@@ -18,10 +18,10 @@ const UserDashboard = () => {
   ];
 
   return (
-    <div className="p-8 bg-gray-100 min-h-screen">
-      <h1 className="text-3xl font-bold mb-8 text-gray-800">User Dashboard</h1>
+    <div className="space-y-8">
+      <h1 className="text-3xl font-bold text-gray-800">User Dashboard</h1>
       
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {metrics.map((metric, index) => (
           <Card key={index} className="hover:shadow-lg transition-shadow duration-300">
             <CardHeader className="pb-2">
@@ -59,12 +59,19 @@ const UserDashboard = () => {
           <div className="divide-y">
             {recentServices.map((service) => (
               <div key={service.id} className="py-4 flex justify-between items-center">
-                <div>
-                  <p className="font-semibold">{service.type} - {service.id}</p>
-                  <p className="text-sm text-gray-600">{service.status}</p>
-                  <p className="text-sm text-gray-600">
-                    {service.eta ? `ETA: ${service.eta}` : `Delivered: ${service.deliveredOn}`}
-                  </p>
+                <div className="flex items-center">
+                  {service.type === "Package" ? (
+                    <Package className="h-6 w-6 mr-2 text-blue-500" />
+                  ) : (
+                    <Truck className="h-6 w-6 mr-2 text-green-500" />
+                  )}
+                  <div>
+                    <p className="font-semibold">{service.type} - {service.id}</p>
+                    <p className="text-sm text-gray-600">{service.status}</p>
+                    <p className="text-sm text-gray-600">
+                      {service.eta ? `ETA: ${service.eta}` : `Delivered: ${service.deliveredOn}`}
+                    </p>
+                  </div>
                 </div>
                 <Button variant="outline">Track</Button>
               </div>
