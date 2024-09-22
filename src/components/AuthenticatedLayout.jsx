@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Routes, Route, Link, Navigate, useNavigate } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
 import Index from "../pages/Index";
@@ -9,10 +9,12 @@ import InformedDelivery from "./InformedDelivery";
 import UserDashboard from "./UserDashboard";
 import StaffDashboard from "./StaffDashboard";
 import DataCollection from "./DataCollection";
-import { LayoutDashboard, Search, Truck, Mail, ClipboardList, LogOut } from "lucide-react";
+import { LayoutDashboard, Search, Truck, Mail, ClipboardList, LogOut, Menu } from "lucide-react";
 
 const AuthenticatedLayout = ({ userRole, onLogout }) => {
   const navigate = useNavigate();
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+
   const navItems = [
     { title: "Home", path: "/", icon: <LayoutDashboard className="h-5 w-5" /> },
     { title: "Dashboard", path: "/dashboard", icon: <LayoutDashboard className="h-5 w-5" /> },
@@ -35,10 +37,14 @@ const AuthenticatedLayout = ({ userRole, onLogout }) => {
     navigate('/signup');
   };
 
+  const toggleSidebar = () => {
+    setIsSidebarOpen(!isSidebarOpen);
+  };
+
   return (
     <div className="flex h-screen bg-gray-100">
       {/* Sidebar */}
-      <aside className="w-64 bg-white shadow-md">
+      <aside className={`bg-white shadow-md transition-all duration-300 ${isSidebarOpen ? 'w-64' : 'w-0'} overflow-hidden`}>
         <div className="p-4">
           <h1 className="text-2xl font-bold text-blue-600">DoP Monitor</h1>
         </div>
@@ -68,6 +74,12 @@ const AuthenticatedLayout = ({ userRole, onLogout }) => {
 
       {/* Main content */}
       <main className="flex-1 overflow-y-auto">
+        <div className="p-4 flex items-center">
+          <Button onClick={toggleSidebar} variant="ghost" className="mr-4">
+            <Menu className="h-6 w-6" />
+          </Button>
+          <h1 className="text-2xl font-bold">DoP Monitor Dashboard</h1>
+        </div>
         <div className="p-8">
           <Routes>
             <Route path="/" element={<Index userRole={userRole} />} />
