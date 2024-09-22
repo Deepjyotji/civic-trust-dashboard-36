@@ -44,8 +44,8 @@ const Signup = ({ onSignIn }) => {
     // TODO: Implement actual signup logic
     console.log('Signup data:', formData);
     toast.success("Signup successful");
-    onSignIn(formData.role); // Call the onSignIn function to update authentication state with role
-    navigate('/'); // Redirect to the home page after successful signup
+    onSignIn(formData.role);
+    navigate('/');
   };
 
   return (
@@ -109,6 +109,7 @@ const Signup = ({ onSignIn }) => {
                   <SelectItem value="user">User</SelectItem>
                   <SelectItem value="deliveryAgent">Delivery Agent</SelectItem>
                   <SelectItem value="postOfficeStaff">Post Office Staff</SelectItem>
+                  <SelectItem value="admin">Admin</SelectItem>
                 </SelectContent>
               </Select>
             </div>

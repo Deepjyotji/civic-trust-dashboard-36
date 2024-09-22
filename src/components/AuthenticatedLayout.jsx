@@ -7,6 +7,8 @@ import TrackService from "./TrackService";
 import DataCollection from "./DataCollection";
 import DeliveryManager from "./DeliveryManager";
 import InformedDelivery from "./InformedDelivery";
+import UserDashboard from "./UserDashboard";
+import StaffDashboard from "./StaffDashboard";
 
 const AuthenticatedLayout = ({ userRole }) => {
   return (
@@ -29,14 +31,14 @@ const AuthenticatedLayout = ({ userRole }) => {
                   Track Service
                 </Link>
                 {userRole === 'user' && (
-                  <Link to="/delivery-manager" className="text-gray-900 inline-flex items-center px-1 pt-1 border-b-2 border-transparent hover:border-gray-300 text-sm font-medium">
-                    Delivery Manager
-                  </Link>
-                )}
-                {userRole === 'user' && (
-                  <Link to="/informed-delivery" className="text-gray-900 inline-flex items-center px-1 pt-1 border-b-2 border-transparent hover:border-gray-300 text-sm font-medium">
-                    Informed Delivery
-                  </Link>
+                  <>
+                    <Link to="/delivery-manager" className="text-gray-900 inline-flex items-center px-1 pt-1 border-b-2 border-transparent hover:border-gray-300 text-sm font-medium">
+                      Delivery Manager
+                    </Link>
+                    <Link to="/informed-delivery" className="text-gray-900 inline-flex items-center px-1 pt-1 border-b-2 border-transparent hover:border-gray-300 text-sm font-medium">
+                      Informed Delivery
+                    </Link>
+                  </>
                 )}
                 {(userRole === 'deliveryAgent' || userRole === 'postOfficeStaff') && (
                   <Link to="/data-collection" className="text-gray-900 inline-flex items-center px-1 pt-1 border-b-2 border-transparent hover:border-gray-300 text-sm font-medium">
@@ -57,7 +59,11 @@ const AuthenticatedLayout = ({ userRole }) => {
           <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <Routes>
               <Route path="/" element={<Index userRole={userRole} />} />
-              <Route path="/dashboard" element={<Dashboard userRole={userRole} />} />
+              <Route path="/dashboard" element={
+                userRole === 'user' ? <UserDashboard /> :
+                (userRole === 'deliveryAgent' || userRole === 'postOfficeStaff') ? <StaffDashboard userRole={userRole} /> :
+                <Dashboard userRole={userRole} />
+              } />
               <Route path="/track" element={<TrackService />} />
               {userRole === 'user' && (
                 <>

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 
 const DataCollection = ({ userRole }) => {
@@ -9,6 +10,8 @@ const DataCollection = ({ userRole }) => {
     serviceType: '',
     deliveryTime: '',
     customerSatisfaction: '',
+    waitTime: '',
+    complaintResolution: '',
     comments: ''
   });
 
@@ -37,6 +40,8 @@ const DataCollection = ({ userRole }) => {
       serviceType: '',
       deliveryTime: '',
       customerSatisfaction: '',
+      waitTime: '',
+      complaintResolution: '',
       comments: ''
     });
   };
@@ -73,29 +78,53 @@ const DataCollection = ({ userRole }) => {
           </div>
         )}
         {userRole === 'postOfficeStaff' && (
-          <div>
-            <label htmlFor="customerSatisfaction" className="block text-sm font-medium text-gray-700">Customer Satisfaction (1-5)</label>
-            <Input
-              type="number"
-              id="customerSatisfaction"
-              name="customerSatisfaction"
-              value={formData.customerSatisfaction}
-              onChange={handleInputChange}
-              placeholder="Enter satisfaction score"
-              min="1"
-              max="5"
-            />
-          </div>
+          <>
+            <div>
+              <label htmlFor="waitTime" className="block text-sm font-medium text-gray-700">Customer Wait Time (in minutes)</label>
+              <Input
+                type="number"
+                id="waitTime"
+                name="waitTime"
+                value={formData.waitTime}
+                onChange={handleInputChange}
+                placeholder="Enter wait time"
+              />
+            </div>
+            <div>
+              <label htmlFor="complaintResolution" className="block text-sm font-medium text-gray-700">Complaint Resolution Time (in minutes)</label>
+              <Input
+                type="number"
+                id="complaintResolution"
+                name="complaintResolution"
+                value={formData.complaintResolution}
+                onChange={handleInputChange}
+                placeholder="Enter resolution time"
+              />
+            </div>
+          </>
         )}
         <div>
-          <label htmlFor="comments" className="block text-sm font-medium text-gray-700">Additional Comments</label>
+          <label htmlFor="customerSatisfaction" className="block text-sm font-medium text-gray-700">Customer Satisfaction (1-5)</label>
           <Input
-            type="text"
+            type="number"
+            id="customerSatisfaction"
+            name="customerSatisfaction"
+            value={formData.customerSatisfaction}
+            onChange={handleInputChange}
+            placeholder="Enter satisfaction score"
+            min="1"
+            max="5"
+          />
+        </div>
+        <div>
+          <label htmlFor="comments" className="block text-sm font-medium text-gray-700">Additional Comments</label>
+          <Textarea
             id="comments"
             name="comments"
             value={formData.comments}
             onChange={handleInputChange}
             placeholder="Enter any additional comments"
+            rows={3}
           />
         </div>
         <Button type="submit">Submit Data</Button>
