@@ -1,7 +1,8 @@
-import { HomeIcon, LayoutDashboardIcon, SearchIcon } from "lucide-react";
+import { HomeIcon, LayoutDashboardIcon, SearchIcon, ClipboardIcon } from "lucide-react";
 import Index from "./pages/Index.jsx";
 import Dashboard from "./components/Dashboard.jsx";
 import TrackService from "./components/TrackService.jsx";
+import DataCollection from "./components/DataCollection.jsx";
 
 export const navItems = [
   {
@@ -21,5 +22,11 @@ export const navItems = [
     to: "/track",
     icon: <SearchIcon className="h-4 w-4" />,
     page: <TrackService />,
+  },
+  {
+    title: "Data Collection",
+    to: "/data-collection",
+    icon: <ClipboardIcon className="h-4 w-4" />,
+    page: <DataCollection />,
   },
 ];
