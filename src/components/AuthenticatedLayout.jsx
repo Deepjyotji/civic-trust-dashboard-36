@@ -1,5 +1,5 @@
 import React from 'react';
-import { Routes, Route, Link, Navigate } from 'react-router-dom';
+import { Routes, Route, Link, Navigate, useNavigate } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
 import Index from "../pages/Index";
 import Dashboard from "./Dashboard";
@@ -8,9 +8,11 @@ import DeliveryManager from "./DeliveryManager";
 import InformedDelivery from "./InformedDelivery";
 import UserDashboard from "./UserDashboard";
 import StaffDashboard from "./StaffDashboard";
-import { LayoutDashboard, Search, Truck, Mail, LogOut } from "lucide-react";
+import DataCollection from "./DataCollection";
+import { LayoutDashboard, Search, Truck, Mail, ClipboardList, LogOut } from "lucide-react";
 
 const AuthenticatedLayout = ({ userRole, onLogout }) => {
+  const navigate = useNavigate();
   const navItems = [
     { title: "Home", path: "/", icon: <LayoutDashboard className="h-5 w-5" /> },
     { title: "Dashboard", path: "/dashboard", icon: <LayoutDashboard className="h-5 w-5" /> },
@@ -22,7 +24,16 @@ const AuthenticatedLayout = ({ userRole, onLogout }) => {
       { title: "Delivery Manager", path: "/delivery-manager", icon: <Truck className="h-5 w-5" /> },
       { title: "Informed Delivery", path: "/informed-delivery", icon: <Mail className="h-5 w-5" /> }
     );
+  } else if (userRole === 'deliveryAgent' || userRole === 'postOfficeStaff') {
+    navItems.push(
+      { title: "Data Collection", path: "/data-collection", icon: <ClipboardList className="h-5 w-5" /> }
+    );
   }
+
+  const handleLogout = () => {
+    onLogout();
+    navigate('/signup');
+  };
 
   return (
     <div className="flex h-screen bg-gray-100">
@@ -45,7 +56,7 @@ const AuthenticatedLayout = ({ userRole, onLogout }) => {
         </nav>
         <div className="absolute bottom-0 w-64 p-4">
           <Button
-            onClick={onLogout}
+            onClick={handleLogout}
             variant="outline"
             className="w-full flex items-center justify-center"
           >
@@ -78,6 +89,9 @@ const AuthenticatedLayout = ({ userRole, onLogout }) => {
                 <Route path="/delivery-manager" element={<DeliveryManager />} />
                 <Route path="/informed-delivery" element={<InformedDelivery />} />
               </>
+            )}
+            {(userRole === 'deliveryAgent' || userRole === 'postOfficeStaff') && (
+              <Route path="/data-collection" element={<DataCollection userRole={userRole} />} />
             )}
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
