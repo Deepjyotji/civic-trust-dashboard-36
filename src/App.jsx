@@ -18,6 +18,11 @@ const App = () => {
     setUserRole(role);
   };
 
+  const handleLogout = () => {
+    setIsAuthenticated(false);
+    setUserRole(null);
+  };
+
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
@@ -42,7 +47,7 @@ const App = () => {
               path="/*"
               element={
                 isAuthenticated ? (
-                  <AuthenticatedLayout userRole={userRole} />
+                  <AuthenticatedLayout userRole={userRole} onLogout={handleLogout} />
                 ) : (
                   <Navigate to="/signup" replace />
                 )
