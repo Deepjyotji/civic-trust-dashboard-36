@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "sonner";
 
-const DataCollection = () => {
+const DataCollection = ({ userRole }) => {
   const [formData, setFormData] = useState({
     serviceType: '',
     deliveryTime: '',
@@ -59,30 +59,34 @@ const DataCollection = () => {
             </SelectContent>
           </Select>
         </div>
-        <div>
-          <label htmlFor="deliveryTime" className="block text-sm font-medium text-gray-700">Delivery Time (in hours)</label>
-          <Input
-            type="number"
-            id="deliveryTime"
-            name="deliveryTime"
-            value={formData.deliveryTime}
-            onChange={handleInputChange}
-            placeholder="Enter delivery time"
-          />
-        </div>
-        <div>
-          <label htmlFor="customerSatisfaction" className="block text-sm font-medium text-gray-700">Customer Satisfaction (1-5)</label>
-          <Input
-            type="number"
-            id="customerSatisfaction"
-            name="customerSatisfaction"
-            value={formData.customerSatisfaction}
-            onChange={handleInputChange}
-            placeholder="Enter satisfaction score"
-            min="1"
-            max="5"
-          />
-        </div>
+        {userRole === 'deliveryAgent' && (
+          <div>
+            <label htmlFor="deliveryTime" className="block text-sm font-medium text-gray-700">Delivery Time (in minutes)</label>
+            <Input
+              type="number"
+              id="deliveryTime"
+              name="deliveryTime"
+              value={formData.deliveryTime}
+              onChange={handleInputChange}
+              placeholder="Enter delivery time"
+            />
+          </div>
+        )}
+        {userRole === 'postOfficeStaff' && (
+          <div>
+            <label htmlFor="customerSatisfaction" className="block text-sm font-medium text-gray-700">Customer Satisfaction (1-5)</label>
+            <Input
+              type="number"
+              id="customerSatisfaction"
+              name="customerSatisfaction"
+              value={formData.customerSatisfaction}
+              onChange={handleInputChange}
+              placeholder="Enter satisfaction score"
+              min="1"
+              max="5"
+            />
+          </div>
+        )}
         <div>
           <label htmlFor="comments" className="block text-sm font-medium text-gray-700">Additional Comments</label>
           <Input

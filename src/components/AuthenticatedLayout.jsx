@@ -1,12 +1,14 @@
 import React from 'react';
-import { Routes, Route, Link } from 'react-router-dom';
+import { Routes, Route, Link, Navigate } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
 import Index from "../pages/Index";
 import Dashboard from "./Dashboard";
 import TrackService from "./TrackService";
 import DataCollection from "./DataCollection";
+import DeliveryManager from "./DeliveryManager";
+import InformedDelivery from "./InformedDelivery";
 
-const AuthenticatedLayout = () => {
+const AuthenticatedLayout = ({ userRole }) => {
   return (
     <div className="min-h-screen bg-gray-100">
       <nav className="bg-white shadow-sm">
@@ -26,9 +28,21 @@ const AuthenticatedLayout = () => {
                 <Link to="/track" className="text-gray-900 inline-flex items-center px-1 pt-1 border-b-2 border-transparent hover:border-gray-300 text-sm font-medium">
                   Track Service
                 </Link>
-                <Link to="/data-collection" className="text-gray-900 inline-flex items-center px-1 pt-1 border-b-2 border-transparent hover:border-gray-300 text-sm font-medium">
-                  Data Collection
-                </Link>
+                {userRole === 'user' && (
+                  <Link to="/delivery-manager" className="text-gray-900 inline-flex items-center px-1 pt-1 border-b-2 border-transparent hover:border-gray-300 text-sm font-medium">
+                    Delivery Manager
+                  </Link>
+                )}
+                {userRole === 'user' && (
+                  <Link to="/informed-delivery" className="text-gray-900 inline-flex items-center px-1 pt-1 border-b-2 border-transparent hover:border-gray-300 text-sm font-medium">
+                    Informed Delivery
+                  </Link>
+                )}
+                {(userRole === 'deliveryAgent' || userRole === 'postOfficeStaff') && (
+                  <Link to="/data-collection" className="text-gray-900 inline-flex items-center px-1 pt-1 border-b-2 border-transparent hover:border-gray-300 text-sm font-medium">
+                    Data Collection
+                  </Link>
+                )}
               </div>
             </div>
             <div className="hidden sm:ml-6 sm:flex sm:items-center">
@@ -42,10 +56,19 @@ const AuthenticatedLayout = () => {
         <main>
           <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <Routes>
-              <Route path="/" element={<Index />} />
-              <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/" element={<Index userRole={userRole} />} />
+              <Route path="/dashboard" element={<Dashboard userRole={userRole} />} />
               <Route path="/track" element={<TrackService />} />
-              <Route path="/data-collection" element={<DataCollection />} />
+              {userRole === 'user' && (
+                <>
+                  <Route path="/delivery-manager" element={<DeliveryManager />} />
+                  <Route path="/informed-delivery" element={<InformedDelivery />} />
+                </>
+              )}
+              {(userRole === 'deliveryAgent' || userRole === 'postOfficeStaff') && (
+                <Route path="/data-collection" element={<DataCollection userRole={userRole} />} />
+              )}
+              <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
           </div>
         </main>

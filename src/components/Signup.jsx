@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "sonner";
 
 const Signup = ({ onSignIn }) => {
@@ -12,6 +13,7 @@ const Signup = ({ onSignIn }) => {
     email: '',
     password: '',
     confirmPassword: '',
+    role: '',
   });
 
   const handleInputChange = (e) => {
@@ -22,16 +24,27 @@ const Signup = ({ onSignIn }) => {
     }));
   };
 
+  const handleRoleChange = (value) => {
+    setFormData(prevState => ({
+      ...prevState,
+      role: value
+    }));
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
     if (formData.password !== formData.confirmPassword) {
       toast.error("Passwords do not match");
       return;
     }
+    if (!formData.role) {
+      toast.error("Please select a role");
+      return;
+    }
     // TODO: Implement actual signup logic
     console.log('Signup data:', formData);
     toast.success("Signup successful");
-    onSignIn(); // Call the onSignIn function to update authentication state
+    onSignIn(formData.role); // Call the onSignIn function to update authentication state with role
     navigate('/'); // Redirect to the home page after successful signup
   };
 
@@ -86,6 +99,18 @@ const Signup = ({ onSignIn }) => {
                 required
                 className="w-full px-3 py-2 border rounded-md"
               />
+            </div>
+            <div>
+              <Select onValueChange={handleRoleChange} value={formData.role}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select your role" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="user">User</SelectItem>
+                  <SelectItem value="deliveryAgent">Delivery Agent</SelectItem>
+                  <SelectItem value="postOfficeStaff">Post Office Staff</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
             <Button type="submit" className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
               Sign Up

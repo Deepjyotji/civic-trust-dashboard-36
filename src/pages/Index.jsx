@@ -2,14 +2,24 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { LayoutDashboard, Search, ClipboardList } from "lucide-react";
+import { LayoutDashboard, Search, ClipboardList, Truck, Mail } from "lucide-react";
 
-const Index = () => {
+const Index = ({ userRole }) => {
   const features = [
-    { title: "Dashboard", description: "View real-time performance metrics and KPIs for DoP offices.", link: "/dashboard", icon: <LayoutDashboard className="h-6 w-6 mb-2" /> },
-    { title: "Track Your Service", description: "Enter your tracking ID to check the status of your postal service.", link: "/track", icon: <Search className="h-6 w-6 mb-2" /> },
-    { title: "Data Collection", description: "For staff: Input real-time data on service delivery and customer satisfaction.", link: "/data-collection", icon: <ClipboardList className="h-6 w-6 mb-2" /> },
+    { title: "Dashboard", description: "View real-time performance metrics and KPIs.", link: "/dashboard", icon: <LayoutDashboard className="h-6 w-6 mb-2" /> },
+    { title: "Track Your Service", description: "Check the status of your postal service.", link: "/track", icon: <Search className="h-6 w-6 mb-2" /> },
   ];
+
+  if (userRole === 'user') {
+    features.push(
+      { title: "Delivery Manager", description: "Manage your delivery preferences.", link: "/delivery-manager", icon: <Truck className="h-6 w-6 mb-2" /> },
+      { title: "Informed Delivery", description: "Preview your incoming mail.", link: "/informed-delivery", icon: <Mail className="h-6 w-6 mb-2" /> }
+    );
+  } else if (userRole === 'deliveryAgent' || userRole === 'postOfficeStaff') {
+    features.push(
+      { title: "Data Collection", description: "Input real-time data on service delivery.", link: "/data-collection", icon: <ClipboardList className="h-6 w-6 mb-2" /> }
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-100">

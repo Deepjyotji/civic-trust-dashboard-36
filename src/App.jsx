@@ -10,9 +10,11 @@ const queryClient = new QueryClient();
 
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [userRole, setUserRole] = useState(null);
 
-  const handleSignIn = () => {
+  const handleSignIn = (role) => {
     setIsAuthenticated(true);
+    setUserRole(role);
   };
 
   return (
@@ -29,7 +31,7 @@ const App = () => {
               path="/*"
               element={
                 isAuthenticated ? (
-                  <AuthenticatedLayout />
+                  <AuthenticatedLayout userRole={userRole} />
                 ) : (
                   <Navigate to="/signup" replace />
                 )
