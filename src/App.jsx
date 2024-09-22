@@ -1,24 +1,45 @@
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { navItems } from "./nav-items";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { useState } from "react";
+import Signup from "./components/Signup";
+import AuthenticatedLayout from "./components/AuthenticatedLayout";
 
 const queryClient = new QueryClient();
 
-const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
-      <BrowserRouter>
-        <Routes>
-          {navItems.map(({ to, page }) => (
-            <Route key={to} path={to} element={page} />
-          ))}
-        </Routes>
-      </BrowserRouter>
-    </TooltipProvider>
-  </QueryClientProvider>
-);
+const App = () => {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  const handleSignIn = () => {
+    setIsAuthenticated(true);
+  };
+
+  return (
+    <QueryClientProvider client={queryClient}>
+      <TooltipProvider>
+        <Toaster />
+        <BrowserRouter>
+          <Routes>
+            <Route
+              path="/signup"
+              element={<Signup onSignIn={handleSignIn} />}
+            />
+            <Route
+              path="/*"
+              element={
+                isAuthenticated ? (
+                  <AuthenticatedLayout />
+                ) : (
+                  <Navigate to="/signup" replace />
+                )
+              }
+            />
+          </Routes>
+        </BrowserRouter>
+      </TooltipProvider>
+    </QueryClientProvider>
+  );
+};
 
 export default App;
