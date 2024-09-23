@@ -44,9 +44,9 @@ const AuthenticatedLayout = ({ userRole, onLogout }) => {
   return (
     <div className="flex h-screen bg-gray-100">
       {/* Sidebar */}
-      <aside className={`bg-indigo-700 text-white transition-all duration-300 ${isSidebarOpen ? 'w-64' : 'w-0'} overflow-hidden`}>
+      <aside className={`bg-indigo-700 text-white transition-all duration-300 ${isSidebarOpen ? 'w-64' : 'w-20'} overflow-hidden`}>
         <div className="p-4">
-          <h1 className="text-2xl font-bold">DoP Monitor</h1>
+          <h1 className={`text-2xl font-bold ${isSidebarOpen ? '' : 'hidden'}`}>DoP Monitor</h1>
         </div>
         <nav className="mt-8">
           {navItems.map((item, index) => (
@@ -56,29 +56,29 @@ const AuthenticatedLayout = ({ userRole, onLogout }) => {
               className="flex items-center px-4 py-3 text-gray-300 hover:bg-indigo-600 hover:text-white transition-colors"
             >
               {item.icon}
-              <span className="ml-3">{item.title}</span>
+              <span className={`ml-3 ${isSidebarOpen ? '' : 'hidden'}`}>{item.title}</span>
             </Link>
           ))}
         </nav>
-        <div className="absolute bottom-0 w-64 p-4">
-          <Button
-            onClick={handleLogout}
-            variant="outline"
-            className="w-full flex items-center justify-center text-white border-white hover:bg-indigo-600"
-          >
-            <LogOut className="h-5 w-5 mr-2" />
-            Log Out
-          </Button>
-        </div>
       </aside>
 
       {/* Main content */}
       <main className="flex-1 overflow-y-auto">
-        <div className="p-4 flex items-center bg-white shadow-sm">
-          <Button onClick={toggleSidebar} variant="ghost" className="mr-4">
-            {isSidebarOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+        <div className="p-4 flex items-center justify-between bg-white shadow-sm">
+          <div className="flex items-center">
+            <Button onClick={toggleSidebar} variant="ghost" className="mr-4">
+              {isSidebarOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+            </Button>
+            <h1 className="text-2xl font-bold text-indigo-700">DoP Monitor Dashboard</h1>
+          </div>
+          <Button
+            onClick={handleLogout}
+            variant="outline"
+            className="flex items-center text-indigo-700 border-indigo-700 hover:bg-indigo-50"
+          >
+            <LogOut className="h-5 w-5 mr-2" />
+            Log Out
           </Button>
-          <h1 className="text-2xl font-bold text-indigo-700">DoP Monitor Dashboard</h1>
         </div>
         <div className="p-8">
           <Routes>
