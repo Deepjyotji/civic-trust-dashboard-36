@@ -26,35 +26,37 @@ const App = () => {
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
-        <Toaster />
-        <BrowserRouter>
-          <Routes>
-            <Route
-              path="/signup"
-              element={<Signup onSignIn={handleSignIn} />}
-            />
-            <Route
-              path="/admin/*"
-              element={
-                isAuthenticated && userRole === 'admin' ? (
-                  <AdminDashboard />
-                ) : (
-                  <Navigate to="/signup" replace />
-                )
-              }
-            />
-            <Route
-              path="/*"
-              element={
-                isAuthenticated ? (
-                  <AuthenticatedLayout userRole={userRole} onLogout={handleLogout} />
-                ) : (
-                  <Navigate to="/signup" replace />
-                )
-              }
-            />
-          </Routes>
-        </BrowserRouter>
+        <div className="min-h-screen bg-gray-50 text-gray-900 font-sans">
+          <Toaster />
+          <BrowserRouter>
+            <Routes>
+              <Route
+                path="/signup"
+                element={<Signup onSignIn={handleSignIn} />}
+              />
+              <Route
+                path="/admin/*"
+                element={
+                  isAuthenticated && userRole === 'admin' ? (
+                    <AdminDashboard />
+                  ) : (
+                    <Navigate to="/signup" replace />
+                  )
+                }
+              />
+              <Route
+                path="/*"
+                element={
+                  isAuthenticated ? (
+                    <AuthenticatedLayout userRole={userRole} onLogout={handleLogout} />
+                  ) : (
+                    <Navigate to="/signup" replace />
+                  )
+                }
+              />
+            </Routes>
+          </BrowserRouter>
+        </div>
       </TooltipProvider>
     </QueryClientProvider>
   );

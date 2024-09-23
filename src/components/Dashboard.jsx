@@ -4,7 +4,6 @@ import { Progress } from "@/components/ui/progress";
 import { AlertCircle, TrendingUp, TrendingDown } from "lucide-react";
 
 const Dashboard = ({ userRole }) => {
-  // Mock data - in a real application, this would come from an API
   const metrics = [
     { title: "Delivery Timelines", value: 92, target: 95, unit: "%", trend: "up" },
     { title: "Customer Satisfaction", value: 4.2, target: 4.5, unit: "/5", trend: "down" },
@@ -25,13 +24,13 @@ const Dashboard = ({ userRole }) => {
   const renderMetrics = (metricsData) => (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
       {metricsData.map((metric, index) => (
-        <Card key={index} className="hover:shadow-lg transition-shadow duration-300">
+        <Card key={index} className="hover:shadow-lg transition-shadow duration-300 bg-white">
           <CardHeader className="pb-2">
             <CardTitle className="text-lg font-medium text-gray-700">{metric.title}</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="flex justify-between items-center mb-2">
-              <span className="text-3xl font-bold text-blue-600">{metric.value}{metric.unit}</span>
+              <span className="text-3xl font-bold text-indigo-600">{metric.value}{metric.unit}</span>
               {metric.trend === "up" ? (
                 <TrendingUp className="h-6 w-6 text-green-500" />
               ) : (
@@ -56,7 +55,7 @@ const Dashboard = ({ userRole }) => {
 
   return (
     <div className="space-y-8">
-      <h1 className="text-3xl font-bold text-gray-800">Dashboard</h1>
+      <h1 className="text-3xl font-bold text-indigo-700">Dashboard</h1>
       {userRole === 'deliveryAgent' && renderMetrics(deliveryAgentMetrics)}
       {userRole === 'postOfficeStaff' && renderMetrics(postOfficeStaffMetrics)}
       {(userRole !== 'deliveryAgent' && userRole !== 'postOfficeStaff') && renderMetrics(metrics)}
